@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>The REKKI command-line</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAARFQTFRF////+/v74+Pj39/fODg4GhoaHBwcHx8fICAg5+fnWFhYPj4+QEBAQUFBOjo6CgoKAAAACQkJAwMDCAgI/v7+9/f39fX19vb2+Pj4kZGRCwsLampqEhISEBAQZGRkDAwMl5eXwMDAcXFxxsbGw8PDbGxsISEhxMTE4ODgOzs7RUVF5ubm0NDQERERDw8PzMzMY2NjIiIix8fHzs7Oy8vLZmZmjY2NBgYGn5+fnJyclJSUtLS0GRkZcnJy+fn5urq619fXMjIySUlJ5eXlRERENzc32dnZ8PDwVVVVJSUlysrKJCQkW1tb/f39gYGBo6OjoKCgiIiIp6endnZ2+vr6r6+vmJiY6urq6OjomZmZuLi4BlmZSAAAAAFiS0dEAIgFHUgAAAAJcEhZcwAAAEgAAABIAEbJaz4AAAD8SURBVDjLY2AYBUQDRiZmrICJEaqAiYWVDQzYOdg5gIgdwmNlYYIq4OTi5gECXj5+AUEhIWEBfj5eEJ+bixOqQERUTBwIJCSFpaRlZOXkhRUkQHwxURFUpyhyCCgpy8iqqAqoqWNzqoamgJa2jq6ePievAI8Gpry4gYChEYOxrp4Jg7qhgKkYhgIzc34LBogCBkt+cyt0eWsbAVsJmAI7VQEbe1R5B0cBJ2cGmAIGbRcBVzdkeXcPAU8vBoQCBiNvAR93hLyvn5CUPwOyAoYAeaFAX7iCIBmBYDuYArBJDCFKAjKhcAOszcKgoRoephABYUVEmkX5MowCogEAHmUeU3wHQ2sAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjAtMDItMThUMTQ6MDE6NDgrMDA6MDCJTJRMAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIwLTAyLTE4VDE0OjAxOjQ4KzAwOjAw+BEs8AAAAEZ0RVh0c29mdHdhcmUASW1hZ2VNYWdpY2sgNi43LjgtOSAyMDE0LTA1LTEyIFExNiBodHRwOi8vd3d3LmltYWdlbWFnaWNrLm9yZ9yG7QAAAAAYdEVYdFRodW1iOjpEb2N1bWVudDo6UGFnZXMAMaf/uy8AAAAYdEVYdFRodW1iOjpJbWFnZTo6aGVpZ2h0ADE5Mg8AcoUAAAAXdEVYdFRodW1iOjpJbWFnZTo6V2lkdGgAMTky06whCAAAABl0RVh0VGh1bWI6Ok1pbWV0eXBlAGltYWdlL3BuZz+yVk4AAAAXdEVYdFRodW1iOjpNVGltZQAxNTgyMDM0NTA4vyruZAAAAA90RVh0VGh1bWI6OlNpemUAMEJClKI+7AAAAFZ0RVh0VGh1bWI6OlVSSQBmaWxlOi8vL21udGxvZy9mYXZpY29ucy8yMDIwLTAyLTE4LzkwZjAyNGZhZDRmMDI1MzhlMzdhYWQ2YjAwMmE5OTUyLmljby5wbmfpUJKMAAAAAElFTkSuQmCC" />
+    <style>
+      /* https://github.com/sindresorhus/github-markdown-css */
+      .markdown-body{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;margin:0;color:#24292f;background-color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";font-size:16px;line-height:1.5;word-wrap:break-word}.markdown-body .octicon{display:inline-block;fill:currentColor;vertical-align:text-bottom}.markdown-body h1:hover .anchor .octicon-link:before,.markdown-body h2:hover .anchor .octicon-link:before,.markdown-body h3:hover .anchor .octicon-link:before,.markdown-body h4:hover .anchor .octicon-link:before,.markdown-body h5:hover .anchor .octicon-link:before,.markdown-body h6:hover .anchor .octicon-link:before{width:16px;height:16px;content:' ';display:inline-block;background-color:currentColor;-webkit-mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>")}.markdown-body details,.markdown-body figcaption,.markdown-body figure{display:block}.markdown-body summary{display:list-item}.markdown-body [hidden]{display:none!important}.markdown-body a{background-color:transparent;color:#0969da;text-decoration:none}.markdown-body a:active,.markdown-body a:hover{outline-width:0}.markdown-body abbr[title]{border-bottom:none;text-decoration:underline dotted}.markdown-body b,.markdown-body strong{font-weight:600}.markdown-body dfn{font-style:italic}.markdown-body h1{margin:.67em 0;font-weight:600;padding-bottom:.3em;font-size:2em;border-bottom:1px solid #d7dde3}.markdown-body mark{background-color:#fff8c5;color:#24292f}.markdown-body small{font-size:90%}.markdown-body sub,.markdown-body sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}.markdown-body sub{bottom:-.25em}.markdown-body sup{top:-.5em}.markdown-body img{border-style:none;max-width:100%;box-sizing:content-box;background-color:#fff}.markdown-body code,.markdown-body kbd,.markdown-body pre,.markdown-body samp{font-family:monospace,monospace;font-size:1em}.markdown-body figure{margin:1em 40px}.markdown-body hr{box-sizing:content-box;overflow:hidden;background:0 0;border-bottom:1px solid #d7dde3;height:.25em;padding:0;margin:24px 0;background-color:#d0d7de;border:0}.markdown-body input{font:inherit;margin:0;overflow:visible;font-family:inherit;font-size:inherit;line-height:inherit}.markdown-body [type=button],.markdown-body [type=reset],.markdown-body [type=submit]{-webkit-appearance:button}.markdown-body [type=button]::-moz-focus-inner,.markdown-body [type=reset]::-moz-focus-inner,.markdown-body [type=submit]::-moz-focus-inner{border-style:none;padding:0}.markdown-body [type=button]:-moz-focusring,.markdown-body [type=reset]:-moz-focusring,.markdown-body [type=submit]:-moz-focusring{outline:1px dotted ButtonText}.markdown-body [type=checkbox],.markdown-body [type=radio]{box-sizing:border-box;padding:0}.markdown-body [type=number]::-webkit-inner-spin-button,.markdown-body [type=number]::-webkit-outer-spin-button{height:auto}.markdown-body [type=search]{-webkit-appearance:textfield;outline-offset:-2px}.markdown-body [type=search]::-webkit-search-cancel-button,.markdown-body [type=search]::-webkit-search-decoration{-webkit-appearance:none}.markdown-body ::-webkit-input-placeholder{color:inherit;opacity:.54}.markdown-body ::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}.markdown-body a:hover{text-decoration:underline}.markdown-body hr::before{display:table;content:""}.markdown-body hr::after{display:table;clear:both;content:""}.markdown-body table{border-spacing:0;border-collapse:collapse;display:block;width:max-content;max-width:100%;overflow:auto}.markdown-body td,.markdown-body th{padding:0}.markdown-body details summary{cursor:pointer}.markdown-body details:not([open])>:not(summary){display:none!important}.markdown-body kbd{display:inline-block;padding:3px 5px;font:11px ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;line-height:10px;color:#24292f;vertical-align:middle;background-color:#f6f8fa;border:solid 1px rgba(175,184,193,.2);border-bottom-color:rgba(175,184,193,.2);border-radius:6px;box-shadow:inset 0 -1px 0 rgba(175,184,193,.2)}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{margin-top:24px;margin-bottom:16px;font-weight:600;line-height:1.25}.markdown-body h2{font-weight:600;padding-bottom:.3em;font-size:1.5em;border-bottom:1px solid #d7dde3}.markdown-body h3{font-weight:600;font-size:1.25em}.markdown-body h4{font-weight:600;font-size:1em}.markdown-body h5{font-weight:600;font-size:.875em}.markdown-body h6{font-weight:600;font-size:.85em;color:#57606a}.markdown-body p{margin-top:0;margin-bottom:10px}.markdown-body blockquote{margin:0;padding:0 1em;color:#57606a;border-left:.25em solid #d0d7de}.markdown-body ol,.markdown-body ul{margin-top:0;margin-bottom:0;padding-left:2em}.markdown-body ol ol,.markdown-body ul ol{list-style-type:lower-roman}.markdown-body ol ol ol,.markdown-body ol ul ol,.markdown-body ul ol ol,.markdown-body ul ul ol{list-style-type:lower-alpha}.markdown-body dd{margin-left:0}.markdown-body code,.markdown-body tt{font-family:ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;font-size:12px}.markdown-body pre{margin-top:0;margin-bottom:0;font-family:ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;font-size:12px;word-wrap:normal}.markdown-body .octicon{display:inline-block;overflow:visible!important;vertical-align:text-bottom;fill:currentColor}.markdown-body ::placeholder{color:#6e7781;opacity:1}.markdown-body input::-webkit-inner-spin-button,.markdown-body input::-webkit-outer-spin-button{margin:0;-webkit-appearance:none;appearance:none}.markdown-body .pl-c{color:#6e7781}.markdown-body .pl-c1,.markdown-body .pl-s .pl-v{color:#0550ae}.markdown-body .pl-e,.markdown-body .pl-en{color:#8250df}.markdown-body .pl-s .pl-s1,.markdown-body .pl-smi{color:#24292f}.markdown-body .pl-ent{color:#116329}.markdown-body .pl-k{color:#cf222e}.markdown-body .pl-pds,.markdown-body .pl-s,.markdown-body .pl-s .pl-pse .pl-s1,.markdown-body .pl-sr,.markdown-body .pl-sr .pl-cce,.markdown-body .pl-sr .pl-sra,.markdown-body .pl-sr .pl-sre{color:#0a3069}.markdown-body .pl-smw,.markdown-body .pl-v{color:#953800}.markdown-body .pl-bu{color:#82071e}.markdown-body .pl-ii{color:#f6f8fa;background-color:#82071e}.markdown-body .pl-c2{color:#f6f8fa;background-color:#cf222e}.markdown-body .pl-sr .pl-cce{font-weight:700;color:#116329}.markdown-body .pl-ml{color:#3b2300}.markdown-body .pl-mh,.markdown-body .pl-mh .pl-en,.markdown-body .pl-ms{font-weight:700;color:#0550ae}.markdown-body .pl-mi{font-style:italic;color:#24292f}.markdown-body .pl-mb{font-weight:700;color:#24292f}.markdown-body .pl-md{color:#82071e;background-color:#ffebe9}.markdown-body .pl-mi1{color:#116329;background-color:#dafbe1}.markdown-body .pl-mc{color:#953800;background-color:#ffd8b5}.markdown-body .pl-mi2{color:#eaeef2;background-color:#0550ae}.markdown-body .pl-mdr{font-weight:700;color:#8250df}.markdown-body .pl-ba{color:#57606a}.markdown-body .pl-sg{color:#8c959f}.markdown-body .pl-corl{text-decoration:underline;color:#0a3069}.markdown-body [data-catalyst]{display:block}.markdown-body g-emoji{font-family:"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";font-size:1em;font-style:normal!important;font-weight:400;line-height:1;vertical-align:-.075em}.markdown-body g-emoji img{width:1em;height:1em}.markdown-body::before{display:table;content:""}.markdown-body::after{display:table;clear:both;content:""}.markdown-body>:first-child{margin-top:0!important}.markdown-body>:last-child{margin-bottom:0!important}.markdown-body a:not([href]){color:inherit;text-decoration:none}.markdown-body .absent{color:#cf222e}.markdown-body .anchor{float:left;padding-right:4px;margin-left:-20px;line-height:1}.markdown-body .anchor:focus{outline:0}.markdown-body blockquote,.markdown-body details,.markdown-body dl,.markdown-body ol,.markdown-body p,.markdown-body pre,.markdown-body table,.markdown-body ul{margin-top:0;margin-bottom:16px}.markdown-body blockquote>:first-child{margin-top:0}.markdown-body blockquote>:last-child{margin-bottom:0}.markdown-body sup>a::before{content:"["}.markdown-body sup>a::after{content:"]"}.markdown-body h1 .octicon-link,.markdown-body h2 .octicon-link,.markdown-body h3 .octicon-link,.markdown-body h4 .octicon-link,.markdown-body h5 .octicon-link,.markdown-body h6 .octicon-link{color:#24292f;vertical-align:middle;visibility:hidden}.markdown-body h1:hover .anchor,.markdown-body h2:hover .anchor,.markdown-body h3:hover .anchor,.markdown-body h4:hover .anchor,.markdown-body h5:hover .anchor,.markdown-body h6:hover .anchor{text-decoration:none}.markdown-body h1:hover .anchor .octicon-link,.markdown-body h2:hover .anchor .octicon-link,.markdown-body h3:hover .anchor .octicon-link,.markdown-body h4:hover .anchor .octicon-link,.markdown-body h5:hover .anchor .octicon-link,.markdown-body h6:hover .anchor .octicon-link{visibility:visible}.markdown-body h1 code,.markdown-body h1 tt,.markdown-body h2 code,.markdown-body h2 tt,.markdown-body h3 code,.markdown-body h3 tt,.markdown-body h4 code,.markdown-body h4 tt,.markdown-body h5 code,.markdown-body h5 tt,.markdown-body h6 code,.markdown-body h6 tt{padding:0 .2em;font-size:inherit}.markdown-body ol.no-list,.markdown-body ul.no-list{padding:0;list-style-type:none}.markdown-body ol[type="1"]{list-style-type:decimal}.markdown-body ol[type=a]{list-style-type:lower-alpha}.markdown-body ol[type=i]{list-style-type:lower-roman}.markdown-body div>ol:not([type]){list-style-type:decimal}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:0;margin-bottom:0}.markdown-body li>p{margin-top:16px}.markdown-body li+li{margin-top:.25em}.markdown-body dl{padding:0}.markdown-body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:600}.markdown-body dl dd{padding:0 16px;margin-bottom:16px}.markdown-body table th{font-weight:600}.markdown-body table td,.markdown-body table th{padding:6px 13px;border:1px solid #d0d7de}.markdown-body table tr{background-color:#fff;border-top:1px solid #d7dde3}.markdown-body table tr:nth-child(2n){background-color:#f6f8fa}.markdown-body table img{background-color:transparent}.markdown-body img[align=right]{padding-left:20px}.markdown-body img[align=left]{padding-right:20px}.markdown-body .emoji{max-width:none;vertical-align:text-top;background-color:transparent}.markdown-body span.frame{display:block;overflow:hidden}.markdown-body span.frame>span{display:block;float:left;width:auto;padding:7px;margin:13px 0 0;overflow:hidden;border:1px solid #d0d7de}.markdown-body span.frame span img{display:block;float:left}.markdown-body span.frame span span{display:block;padding:5px 0 0;clear:both;color:#24292f}.markdown-body span.align-center{display:block;overflow:hidden;clear:both}.markdown-body span.align-center>span{display:block;margin:13px auto 0;overflow:hidden;text-align:center}.markdown-body span.align-center span img{margin:0 auto;text-align:center}.markdown-body span.align-right{display:block;overflow:hidden;clear:both}.markdown-body span.align-right>span{display:block;margin:13px 0 0;overflow:hidden;text-align:right}.markdown-body span.align-right span img{margin:0;text-align:right}.markdown-body span.float-left{display:block;float:left;margin-right:13px;overflow:hidden}.markdown-body span.float-left span{margin:13px 0 0}.markdown-body span.float-right{display:block;float:right;margin-left:13px;overflow:hidden}.markdown-body span.float-right>span{display:block;margin:13px auto 0;overflow:hidden;text-align:right}.markdown-body code,.markdown-body tt{padding:.2em .4em;margin:0;font-size:85%;background-color:rgba(175,184,193,.2);border-radius:6px}.markdown-body code br,.markdown-body tt br{display:none}.markdown-body del code{text-decoration:inherit}.markdown-body pre code{font-size:100%}.markdown-body pre>code{padding:0;margin:0;word-break:normal;white-space:pre;background:0 0;border:0}.markdown-body .highlight{margin-bottom:16px}.markdown-body .highlight pre{margin-bottom:0;word-break:normal}.markdown-body .highlight pre,.markdown-body pre{padding:16px;overflow:auto;font-size:85%;line-height:1.45;background-color:#f6f8fa;border-radius:6px}.markdown-body pre code,.markdown-body pre tt{display:inline;max-width:auto;padding:0;margin:0;overflow:visible;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}.markdown-body .csv-data td,.markdown-body .csv-data th{padding:5px;overflow:hidden;font-size:12px;line-height:1;text-align:left;white-space:nowrap}.markdown-body .csv-data .blob-num{padding:10px 8px 9px;text-align:right;background:#fff;border:0}.markdown-body .csv-data tr{border-top:0}.markdown-body .csv-data th{font-weight:600;background:#f6f8fa;border-top:0}.markdown-body .footnotes{font-size:12px;color:#57606a;border-top:1px solid #d0d7de}.markdown-body .footnotes ol{padding-left:16px}.markdown-body .footnotes li{position:relative}.markdown-body .footnotes li:target::before{position:absolute;top:-8px;right:-8px;bottom:-8px;left:-24px;pointer-events:none;content:"";border:2px solid #0969da;border-radius:6px}.markdown-body .footnotes li:target{color:#24292f}.markdown-body .footnotes .data-footnote-backref g-emoji{font-family:monospace}.markdown-body .task-list-item{list-style-type:none}.markdown-body .task-list-item label{font-weight:400}.markdown-body .task-list-item.enabled label{cursor:pointer}.markdown-body .task-list-item+.task-list-item{margin-top:3px}.markdown-body .task-list-item .handle{display:none}.markdown-body .task-list-item-checkbox{margin:0 .2em .25em -1.6em;vertical-align:middle}.markdown-body .contains-task-list:dir(rtl) .task-list-item-checkbox{margin:0 -1.6em .25em .2em}.markdown-body ::-webkit-calendar-picker-indicator{filter:invert(50%)}
+
+      .markdown-body {
+        box-sizing: border-box;
+        min-width: 200px;
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 45px;
+      }
+
+      @media (max-width: 767px) {
+        .markdown-body {
+          padding: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="markdown-body">
+      <h1 id="the-rekki-command-line"><a aria-hidden="true" href="#the-rekki-command-line" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>The REKKI command-line</h1>
+<p>REKKI has a dedicated Platform Team in charge of building a robust foundation
+that can be leveraged by the Tech &amp; Product teams. Part of this foundation is
+the Developer Experience. To that end, we are developping an in-house CLI that
+allows the engineers to easily interact with our stack.</p>
+<h2 id="table-of-contents"><a aria-hidden="true" href="#table-of-contents" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Table of Contents</h2>
+
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#install-update">Install &amp; Update</a></li>
+<li><a href="#system-wide-commands">System-wide Commands</a>
+
+<ul>
+<li><a href="#rekki-init"><code>rekki init</code></a></li>
+<li><a href="#rekki-shellenv"><code>rekki shellenv</code></a></li>
+<li><a href="#rekki-whoami"><code>rekki whoami</code></a></li>
+</ul></li>
+<li><a href="#repository-commands">Repository Commands</a>
+
+<ul>
+<li><a href="#rekki-clone"><code>rekki clone</code></a></li>
+</ul></li>
+<li><a href="#services-jobs-development-commands">Services/Jobs Development Commands</a>
+
+<ul>
+<li><a href="#rekki-deploy"><code>rekki deploy</code></a></li>
+<li><a href="#rekki-diff"><code>rekki diff</code></a></li>
+<li><a href="#rekki-run"><code>rekki run</code></a></li>
+</ul></li>
+<li><a href="#services-jobs-management-commands">Services/Jobs Management Commands</a>
+
+<ul>
+<li><a href="#rekki-delete"><code>rekki delete</code></a></li>
+<li><a href="#rekki-env"><code>rekki env</code></a></li>
+<li><a href="#rekki-history"><code>rekki history</code></a></li>
+<li><a href="#rekki-logs"><code>rekki logs</code></a></li>
+<li><a href="#rekki-pods"><code>rekki pods</code></a></li>
+<li><a href="#rekki-restart"><code>rekki restart</code></a></li>
+<li><a href="#rekki-rollback"><code>rekki rollback</code></a></li>
+</ul></li>
+<li><a href="#services-jobs-browser-commands">Services/Jobs Browser Commands</a>
+
+<ul>
+<li><a href="#rekki-aws-secrets"><code>rekki aws:secrets</code></a></li>
+<li><a href="#rekki-dd-apm"><code>rekki dd:apm</code></a></li>
+<li><a href="#rekki-dd-containers"><code>rekki dd:containers</code></a></li>
+<li><a href="#rekki-dd-errors"><code>rekki dd:errors</code></a></li>
+<li><a href="#rekki-dd-logs"><code>rekki dd:logs</code></a></li>
+<li><a href="#rekki-dd-metrics"><code>rekki dd:metrics</code></a></li>
+<li><a href="#rekki-dd-pods"><code>rekki dd:pods</code></a></li>
+<li><a href="#rekki-dd-ps"><code>rekki dd:ps</code></a></li>
+<li><a href="#rekki-dd-traces"><code>rekki dd:traces</code></a></li>
+</ul></li>
+<li><a href="#cluster-commands">Cluster Commands</a>
+
+<ul>
+<li><a href="#rekki-repl"><code>rekki repl</code></a></li>
+<li><a href="#rekki-ssh"><code>rekki ssh</code></a></li>
+<li><a href="#rekki-tunnel"><code>rekki tunnel</code></a></li>
+</ul></li>
+<li><a href="#other-commands">Other Commands</a>
+
+<ul>
+<li><a href="#rekki-docs"><code>rekki docs</code></a></li>
+<li><a href="#rekki-flare"><code>rekki flare</code></a></li>
+<li><a href="#rekki-help"><code>rekki help</code></a></li>
+<li><a href="#rekki-version"><code>rekki version</code></a></li>
+</ul></li>
+<li><a href="#topics">Topics</a>
+
+<ul>
+<li><a href="#feedbacks-issues">Feedbacks &amp; Issues</a></li>
+<li><a href="#options-environment">Options &amp; Environment</a></li>
+<li><a href="#resources">Resources</a></li>
+<li><a href="#services-jobs">Services &amp; Jobs</a></li>
+</ul></li>
+</ul>
+<h2 id="introduction"><a aria-hidden="true" href="#introduction" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Introduction</h2>
+
+<p>This CLI is a companion used by REKKI engineers to improve their day-to-day
+workflow. It takes care from everything from installing the required system
+dependencies to providing an efficient and easy-to-use hot-reloading mecanism.</p>
+<h2 id="install-update"><a aria-hidden="true" href="#install-update" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Install &amp; Update</h2>
+
+<p>To download the latest release and set up your system:</p>
+
+<pre><code>curl --proto '=https' --tlsv1.2 -sSf https://cli.rekki.team/install.sh | bash
+</code></pre>
+
+<p>To keep your system up to date after the first install:</p>
+
+<pre><code>rekki init
+</code></pre>
+<h2 id="system-wide-commands"><a aria-hidden="true" href="#system-wide-commands" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>System-wide Commands</h2>
+<h3 id="rekki-init"><a aria-hidden="true" href="#rekki-init" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki init</code></h3>
+
+<blockquote>
+<p>Initialize the ~/.rekki directory.</p>
+</blockquote>
+
+<p>The initialization is composed of the following steps:</p>
+
+<ol>
+<li>update the CLI</li>
+<li>install the Xcode command line tools (macOS only)</li>
+<li>load your SSH key</li>
+<li>check that the SSH key can be used to log in a GitHub account; and make
+sure your AWS credentials are valid</li>
+<li>generate the kubernetes configuration</li>
+<li>generate the ephemeral ssh keys</li>
+<li>fetch the latest version of <a href="https://github.com/rekki/devops" target="_blank">https://github.com/rekki/devops</a></li>
+<li>install the system dependencies with the proper versions</li>
+<li>install the go dependencies with the proper versions</li>
+<li>alias <code>rekki</code> to <code>rk</code></li>
+</ol>
+
+<p>This command is idempotent. You can, and should, run it as often as you need.</p>
+<h4 id="usage"><a aria-hidden="true" href="#usage" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki init [options]
+</code></pre>
+
+<p><em>aliased as <code>rekki update</code>, <code>rekki upgrade</code></em></p>
+<h4 id="options"><a aria-hidden="true" href="#options" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Options</h4>
+
+<pre><code>    --no-banner        true to disable the REKKI banner
+    --no-self-update   true to disable the CLI self update
+    --version string   specific commit to install instead of the latest release
+</code></pre>
+<h4 id="examples"><a aria-hidden="true" href="#examples" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Initialize or update your machine</span>
+</span></span><span style="display:flex;"><span>rekki init
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Initialize or update your machine, but skip the CLI self update</span>
+</span></span><span style="display:flex;"><span>rekki init --no-self-update
+</span></span></code></pre><h3 id="rekki-shellenv"><a aria-hidden="true" href="#rekki-shellenv" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki shellenv</code></h3>
+
+<blockquote>
+<p>Print export statements.</p>
+</blockquote>
+
+<p>These export statements have to be imported in your shell environment for this
+CLI to work properly.</p>
+<h4 id="usage-1"><a aria-hidden="true" href="#usage-1" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki shellenv
+</code></pre>
+<h4 id="examples-1"><a aria-hidden="true" href="#examples-1" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Add this to your ~/.zprofile to integrate with your shell:</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">eval</span> <span style="color:#d14">&#34;</span><span style="color:#000;font-weight:bold">$(</span><span style="color:#d14">&#34;</span><span style="color:#008080">$HOME</span><span style="color:#d14">/.rekki/bin/rekki&#34;</span> shellenv<span style="color:#000;font-weight:bold">)</span><span style="color:#d14">&#34;</span>
+</span></span></code></pre><h3 id="rekki-whoami"><a aria-hidden="true" href="#rekki-whoami" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki whoami</code></h3>
+
+<blockquote>
+<p>Output the identities you are logged with.</p>
+</blockquote>
+
+<p>Check AWS and GitHub and print the accounts your are logged with on stdout.</p>
+<h4 id="usage-2"><a aria-hidden="true" href="#usage-2" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki whoami
+</code></pre>
+<h4 id="examples-2"><a aria-hidden="true" href="#examples-2" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Print your identities</span>
+</span></span><span style="display:flex;"><span>rekki whoami
+</span></span></code></pre><h2 id="repository-commands"><a aria-hidden="true" href="#repository-commands" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Repository Commands</h2>
+<h3 id="rekki-clone"><a aria-hidden="true" href="#rekki-clone" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki clone</code></h3>
+
+<blockquote>
+<p>Clone a REKKI repository into a new directory.</p>
+</blockquote>
+
+<p>Clone clones the remote repository. It is possible to only provide the
+repository name, in which case it will clone from the REKKI GitHub
+organization. It creates the remote-tracking branches for the master branch
+only.</p>
+<h4 id="usage-3"><a aria-hidden="true" href="#usage-3" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki clone [options] &lt;repository&gt; [directory]
+</code></pre>
+<h4 id="examples-3"><a aria-hidden="true" href="#examples-3" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Clone the git@github.com:rekki/go.git repository into ./go</span>
+</span></span><span style="display:flex;"><span>rekki clone go
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Clone the git@github.com:rekki/go.git repository into /tmp/go-tmp</span>
+</span></span><span style="display:flex;"><span>rekki clone go /tmp/go-tmp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Clone the https://github.com/golang/go.git repository into /tmp/rekki-go</span>
+</span></span><span style="display:flex;"><span>rekki clone https://github.com/golang/go.git /tmp/golang-go
+</span></span></code></pre><h2 id="services-jobs-development-commands"><a aria-hidden="true" href="#services-jobs-development-commands" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Services/Jobs Development Commands</h2>
+<h3 id="rekki-deploy"><a aria-hidden="true" href="#rekki-deploy" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki deploy</code></h3>
+
+<blockquote>
+<p>Deploy the service or job.</p>
+</blockquote>
+
+<p>Deploy the current REKKI service or job into a cluster.</p>
+
+<p>First it will send the request to Sauron (our internal builder service) to
+build the docker image and publish it to our AWS ECR Docker repository.</p>
+
+<p>In order for a build to happen your current directory must:</p>
+
+<ul>
+<li>contain a Dockerfile</li>
+<li>be part of a Rekki owned git repository (or worktree of a repository)</li>
+</ul>
+
+<p>When Sauron is finished building and pushing to ECR,
+it will take care of creating a new Helm release into the
+cluster.</p>
+<h4 id="usage-4"><a aria-hidden="true" href="#usage-4" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki deploy [options]
+</code></pre>
+<h4 id="options-1"><a aria-hidden="true" href="#options-1" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Options</h4>
+
+<pre><code>    --allow-dirty         allow to deploy with a dirty git state
+    --force               force the helm deploy
+    --sauron-url string   the url of the sauron service (default &quot;https://sauron.rekki.team&quot;)
+    --version string      git commit to be deployed (default to using the current git head)
+</code></pre>
+<h4 id="examples-4"><a aria-hidden="true" href="#examples-4" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Deploy the hulk service on the feat environment</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/hulk <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki deploy
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Deploy the hulk service on the live environment</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/hulk <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki deploy -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Deploy a non-go application</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> alfred <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki deploy
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Deploy a custom version of the hulk service on the live environment</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/hulk <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki deploy -nlive --version<span style="color:#000;font-weight:bold">=</span>a8287fcf155f8ed70808d260d9ac8d05491372cf
+</span></span></code></pre><h3 id="rekki-diff"><a aria-hidden="true" href="#rekki-diff" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki diff</code></h3>
+
+<blockquote>
+<p>Display diff between local and deployed code.</p>
+</blockquote>
+
+<p>Diff uses the current git head code, and compares it with the remote code
+deployed for the service or job.</p>
+<h4 id="usage-5"><a aria-hidden="true" href="#usage-5" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki diff [options]
+</code></pre>
+<h4 id="examples-5"><a aria-hidden="true" href="#examples-5" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Diff hulk on feat</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/hulk <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki diff
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Diff hulk on live</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/hulk <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki diff -nlive
+</span></span></code></pre><h3 id="rekki-run"><a aria-hidden="true" href="#rekki-run" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki run</code></h3>
+
+<blockquote>
+<p>Run the service or job for development.</p>
+</blockquote>
+
+<p>This command is used to run a service or job locally. This takes care of:</p>
+
+<ul>
+<li>fetching the environment variables</li>
+<li>creating the tunnel to the given resources (by default: DB and Redis)</li>
+<li>starting the service</li>
+</ul>
+
+<p>This command will try to infer the correct command and arguments when starting
+the service. If your need differs from what&rsquo;s been inferred, you can easily
+override. See the examples.</p>
+
+<p>If not specified in the <code>-t</code> flags, random local ports will be chosen when
+additional resources are added to be tunnelled. This behavior diverges from
+what you would observe in <code>rekki tunnel</code> as the goal here is to allow you to
+run several instances of <code>rekki run</code> in parallel without having to worry about
+port collision. See the examples on how you can force a specific port to be
+used.</p>
+
+<p>Note that tunnels to services will automatically populate the <code>_SERVICE_HOST</code>
+and <code>_SERVICE_PORT</code> environment variables.</p>
+<h4 id="usage-6"><a aria-hidden="true" href="#usage-6" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki run [options] [-- cmd args...]
+</code></pre>
+<h4 id="options-2"><a aria-hidden="true" href="#options-2" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Options</h4>
+
+<pre><code>    --as string            specify which resource the command should be run as
+    --clear                clear screen before executing command
+-e, --env strings          set environment variables
+    --no-default-tunnels   disable the default tunnels to the database and redis
+-t, --tunnel strings       set additional resources for which tunnel must be created
+    --watch                watch for changes and autoreload service or job
+</code></pre>
+<h4 id="examples-6"><a aria-hidden="true" href="#examples-6" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Start the hulk service with the feat environment</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/hulk <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki run
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Start the wasabi service with the live environment</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki run -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Define custom environment variables</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki run -e <span style="color:#008080">LOG_LEVEL</span><span style="color:#000;font-weight:bold">=</span>info
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Define additional resources to be tunnelled</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki run -t svc/hulk
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Define additional resources to be tunnelled on a specific local port</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki run -t 5423:db/live -t 6379:redis/live
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># The name fallbacks to be the namespace if not specified for database and redis (default namespace is feat)</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki run -t 5423:db -t 6379:redis
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Start a service with a custom command and arguments</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki run -- go run . --admin<span style="color:#000;font-weight:bold">=</span><span style="color:#0086b3">true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Start a service, autoreload and clear screen every time it restarts</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki run --watch --clear
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Start a feat service, and tunnel to both a local service on port 9090 and a live service</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/hulk <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki run -t marketplace-everything@local:9090 -t blackrock-search-grpc@live
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Run a go script with the shared live secret</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki run --as<span style="color:#000;font-weight:bold">=</span>shared@live ./scripts/generate-model.go
+</span></span></code></pre><h2 id="services-jobs-management-commands"><a aria-hidden="true" href="#services-jobs-management-commands" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Services/Jobs Management Commands</h2>
+<h3 id="rekki-delete"><a aria-hidden="true" href="#rekki-delete" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki delete</code></h3>
+
+<blockquote>
+<p>Delete a service or job.</p>
+</blockquote>
+
+<p>Delete a service or job by uninstalling the corresponding helm release.</p>
+<h4 id="usage-7"><a aria-hidden="true" href="#usage-7" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki delete [options] [resource]
+</code></pre>
+<h4 id="examples-7"><a aria-hidden="true" href="#examples-7" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Delete hulk on feat</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/hulk <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki delete
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Delete hulk on live</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/hulk <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki delete -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Same but can be executed anywhere on your system</span>
+</span></span><span style="display:flex;"><span>rekki delete -nlive hulk
+</span></span></code></pre><h3 id="rekki-env"><a aria-hidden="true" href="#rekki-env" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki env</code></h3>
+
+<blockquote>
+<p>Print the environment variables for a service or job.</p>
+</blockquote>
+
+<p>The environment variables are fetched from AWS Secrets Manager.</p>
+<h4 id="usage-8"><a aria-hidden="true" href="#usage-8" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki env [options] [resource]
+</code></pre>
+<h4 id="examples-8"><a aria-hidden="true" href="#examples-8" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Print the environment variables for the wasabi service on feat</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki env
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Print the environment variables for the hulk service on live</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/hulk <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki env -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Same but can be executed anywhere on your system</span>
+</span></span><span style="display:flex;"><span>rekki env -nlive hulk
+</span></span></code></pre><h3 id="rekki-history"><a aria-hidden="true" href="#rekki-history" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki history</code></h3>
+
+<blockquote>
+<p>Show deployments history for a service or job.</p>
+</blockquote>
+
+<p>List all the deployed Helm releases for a service or job.</p>
+<h4 id="usage-9"><a aria-hidden="true" href="#usage-9" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki history [options] [resource]
+</code></pre>
+<h4 id="examples-9"><a aria-hidden="true" href="#examples-9" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Print the history for wasabi in feat</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki <span style="color:#0086b3">history</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Print the history for wasabi in live</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki <span style="color:#0086b3">history</span> -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Same but can be executed anywhere on your system</span>
+</span></span><span style="display:flex;"><span>rekki <span style="color:#0086b3">history</span> -nlive wasabi
+</span></span></code></pre><h3 id="rekki-logs"><a aria-hidden="true" href="#rekki-logs" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki logs</code></h3>
+
+<blockquote>
+<p>Fetch logs for a service or job.</p>
+</blockquote>
+
+<p>Contact the kubernetes cluster to fetch logs for the given service or job.</p>
+<h4 id="usage-10"><a aria-hidden="true" href="#usage-10" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki logs [options] [resource]
+</code></pre>
+<h4 id="options-3"><a aria-hidden="true" href="#options-3" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Options</h4>
+
+<pre><code>-f, --follow   specify if the logs should be streamed
+</code></pre>
+<h4 id="examples-10"><a aria-hidden="true" href="#examples-10" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Get logs for wasabi on feat</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki logs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Get logs for wasabi on live</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki logs -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Same but can be executed anywhere on your system</span>
+</span></span><span style="display:flex;"><span>rekki logs -nlive wasabi
+</span></span></code></pre><h3 id="rekki-pods"><a aria-hidden="true" href="#rekki-pods" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki pods</code></h3>
+
+<blockquote>
+<p>List all the pods for a service or job.</p>
+</blockquote>
+
+<p>Query the cluster to fetch all the pods for the service or job.</p>
+<h4 id="usage-11"><a aria-hidden="true" href="#usage-11" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki pods [options] [resource]
+</code></pre>
+<h4 id="examples-11"><a aria-hidden="true" href="#examples-11" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># List all the pods for the wasabi service</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki pods
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># List all the pods for the wasabi service on live</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki pods -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Same but can be executed anywhere on your system</span>
+</span></span><span style="display:flex;"><span>rekki pods -nlive wasabi
+</span></span></code></pre><h3 id="rekki-restart"><a aria-hidden="true" href="#rekki-restart" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki restart</code></h3>
+
+<blockquote>
+<p>Restart the deployments for a service.</p>
+</blockquote>
+
+<p>Sequentially restart all the pods for all the deployments of the service.</p>
+<h4 id="usage-12"><a aria-hidden="true" href="#usage-12" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki restart [options] [resource]
+</code></pre>
+<h4 id="examples-12"><a aria-hidden="true" href="#examples-12" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Restart wasabi on feat</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki restart
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Restart wasabi on live</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki restart -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Same but can be executed anywhere on your system</span>
+</span></span><span style="display:flex;"><span>rekki restart -nlive wasabi
+</span></span></code></pre><h3 id="rekki-rollback"><a aria-hidden="true" href="#rekki-rollback" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki rollback</code></h3>
+
+<blockquote>
+<p>Rollback a service or job to a specific release.</p>
+</blockquote>
+
+<p>Rollback a service or job deployment to the specific helm release.</p>
+<h4 id="usage-13"><a aria-hidden="true" href="#usage-13" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki rollback [options] [resource]
+</code></pre>
+<h4 id="examples-13"><a aria-hidden="true" href="#examples-13" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Rollback hulk on feat</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/hulk <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki rollback
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Rollback hulk on live</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/hulk <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki rollback -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Same but can be executed anywhere on your system</span>
+</span></span><span style="display:flex;"><span>rekki rollback -nlive hulk
+</span></span></code></pre><h2 id="services-jobs-browser-commands"><a aria-hidden="true" href="#services-jobs-browser-commands" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Services/Jobs Browser Commands</h2>
+<h3 id="rekki-aws-secrets"><a aria-hidden="true" href="#rekki-aws-secrets" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki aws:secrets</code></h3>
+
+<blockquote>
+<p>Open AWS Secrets Manager in the default web browser.</p>
+</blockquote>
+
+<p>Open the interface to manage services and jobs secrets in the default web
+browser.</p>
+<h4 id="usage-14"><a aria-hidden="true" href="#usage-14" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki aws:secrets [options] [resource]
+</code></pre>
+<h4 id="examples-14"><a aria-hidden="true" href="#examples-14" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the AWS Secrets for wasabi in feat</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki aws:secrets
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the AWS Secrets for wasabi in live</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki aws:secrets -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Same but can be executed anywhere on your system</span>
+</span></span><span style="display:flex;"><span>rekki aws:secrets -nlive wasabi
+</span></span></code></pre><h3 id="rekki-dd-apm"><a aria-hidden="true" href="#rekki-dd-apm" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki dd:apm</code></h3>
+
+<blockquote>
+<p>Open Datadog APM in the default web browser.</p>
+</blockquote>
+
+<p>Open the Datadog APM interface for the service or job.</p>
+<h4 id="usage-15"><a aria-hidden="true" href="#usage-15" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki dd:apm [options] [resource]
+</code></pre>
+<h4 id="examples-15"><a aria-hidden="true" href="#examples-15" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the Datadog APM for wasabi in feat</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki dd:apm
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the Datadog APM for wasabi in live</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki dd:apm -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Same but can be executed anywhere on your system</span>
+</span></span><span style="display:flex;"><span>rekki dd:apm -nlive wasabi
+</span></span></code></pre><h3 id="rekki-dd-containers"><a aria-hidden="true" href="#rekki-dd-containers" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki dd:containers</code></h3>
+
+<blockquote>
+<p>Open Datadog Containers in the default web browser.</p>
+</blockquote>
+
+<p>Open the Datadog Containers interface for the service or job.</p>
+<h4 id="usage-16"><a aria-hidden="true" href="#usage-16" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki dd:containers [options] [resource]
+</code></pre>
+<h4 id="examples-16"><a aria-hidden="true" href="#examples-16" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the Datadog Containers for wasabi in feat</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki dd:containers
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the Datadog Containers for wasabi in live</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki dd:containers -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Same but can be executed anywhere on your system</span>
+</span></span><span style="display:flex;"><span>rekki dd:containers -nlive wasabi
+</span></span></code></pre><h3 id="rekki-dd-errors"><a aria-hidden="true" href="#rekki-dd-errors" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki dd:errors</code></h3>
+
+<blockquote>
+<p>Open Datadog Error Tracking in the default web browser.</p>
+</blockquote>
+
+<p>Open the Datadog Error Tracking interface for the service or job.</p>
+<h4 id="usage-17"><a aria-hidden="true" href="#usage-17" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki dd:errors [options] [resource]
+</code></pre>
+<h4 id="examples-17"><a aria-hidden="true" href="#examples-17" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the Datadog Error Tracking for wasabi in feat</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki dd:errors
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the Datadog Error Tracking for wasabi in live</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki dd:errors -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Same but can be executed anywhere on your system</span>
+</span></span><span style="display:flex;"><span>rekki dd:errors -nlive wasabi
+</span></span></code></pre><h3 id="rekki-dd-logs"><a aria-hidden="true" href="#rekki-dd-logs" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki dd:logs</code></h3>
+
+<blockquote>
+<p>Open Datadog Logs in the default web browser.</p>
+</blockquote>
+
+<p>Open the Datadog Logs interface for the service or job.</p>
+<h4 id="usage-18"><a aria-hidden="true" href="#usage-18" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki dd:logs [options] [resource]
+</code></pre>
+<h4 id="examples-18"><a aria-hidden="true" href="#examples-18" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the Datadog Logs for wasabi in feat</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki dd:logs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the Datadog Logs for wasabi in live</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki dd:logs -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Same but can be executed anywhere on your system</span>
+</span></span><span style="display:flex;"><span>rekki dd:logs -nlive wasabi
+</span></span></code></pre><h3 id="rekki-dd-metrics"><a aria-hidden="true" href="#rekki-dd-metrics" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki dd:metrics</code></h3>
+
+<blockquote>
+<p>Open Datadog Metrics in the default web browser.</p>
+</blockquote>
+
+<p>Open the Datadog Metrics interface for the service or job.</p>
+<h4 id="usage-19"><a aria-hidden="true" href="#usage-19" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki dd:metrics [options] [resource]
+</code></pre>
+<h4 id="examples-19"><a aria-hidden="true" href="#examples-19" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the Datadog Metrics for wasabi in feat</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki dd:metrics
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the Datadog Metrics for wasabi in live</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki dd:metrics -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Same but can be executed anywhere on your system</span>
+</span></span><span style="display:flex;"><span>rekki dd:metrics -nlive wasabi
+</span></span></code></pre><h3 id="rekki-dd-pods"><a aria-hidden="true" href="#rekki-dd-pods" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki dd:pods</code></h3>
+
+<blockquote>
+<p>Open Datadog Pods in the default web browser.</p>
+</blockquote>
+
+<p>Open the Datadog Pods interface for the service or job.</p>
+<h4 id="usage-20"><a aria-hidden="true" href="#usage-20" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki dd:pods [options] [resource]
+</code></pre>
+<h4 id="examples-20"><a aria-hidden="true" href="#examples-20" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the Datadog Pods for wasabi in feat</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki dd:pods
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the Datadog Pods for wasabi in live</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki dd:pods -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Same but can be executed anywhere on your system</span>
+</span></span><span style="display:flex;"><span>rekki dd:pods -nlive wasabi
+</span></span></code></pre><h3 id="rekki-dd-ps"><a aria-hidden="true" href="#rekki-dd-ps" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki dd:ps</code></h3>
+
+<blockquote>
+<p>Open Datadog Processes in the default web browser.</p>
+</blockquote>
+
+<p>Open the Datadog Processes interface for the service or job.</p>
+<h4 id="usage-21"><a aria-hidden="true" href="#usage-21" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki dd:ps [options] [resource]
+</code></pre>
+<h4 id="examples-21"><a aria-hidden="true" href="#examples-21" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the Datadog Processes for wasabi in feat</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki dd:ps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the Datadog Processes for wasabi in live</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki dd:ps -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Same but can be executed anywhere on your system</span>
+</span></span><span style="display:flex;"><span>rekki dd:ps -nlive wasabi
+</span></span></code></pre><h3 id="rekki-dd-traces"><a aria-hidden="true" href="#rekki-dd-traces" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki dd:traces</code></h3>
+
+<blockquote>
+<p>Open Datadog Traces in the default web browser.</p>
+</blockquote>
+
+<p>Open the Datadog Traces interface for the service or job.</p>
+<h4 id="usage-22"><a aria-hidden="true" href="#usage-22" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki dd:traces [options] [resource]
+</code></pre>
+<h4 id="examples-22"><a aria-hidden="true" href="#examples-22" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the Datadog Traces for wasabi in feat</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki dd:traces
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Open the Datadog Traces for wasabi in live</span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">cd</span> go/cmd/wasabi <span style="color:#000;font-weight:bold">&amp;&amp;</span> rekki dd:traces -nlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Same but can be executed anywhere on your system</span>
+</span></span><span style="display:flex;"><span>rekki dd:traces -nlive hulk
+</span></span></code></pre><h2 id="cluster-commands"><a aria-hidden="true" href="#cluster-commands" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Cluster Commands</h2>
+<h3 id="rekki-repl"><a aria-hidden="true" href="#rekki-repl" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki repl</code></h3>
+
+<blockquote>
+<p>Start a REPL to a remote resource.</p>
+</blockquote>
+
+<p>Start a read–eval–print loop with a remote resource (only postgres is supported
+at the moment).</p>
+<h4 id="usage-23"><a aria-hidden="true" href="#usage-23" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki repl [options] &lt;resource&gt;
+</code></pre>
+<h4 id="examples-23"><a aria-hidden="true" href="#examples-23" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># repl the feat database</span>
+</span></span><span style="display:flex;"><span>rekki repl db
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># repl the live database</span>
+</span></span><span style="display:flex;"><span>rekki repl db/live
+</span></span></code></pre><h3 id="rekki-ssh"><a aria-hidden="true" href="#rekki-ssh" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki ssh</code></h3>
+
+<blockquote>
+<p>Open an interactive SSH session to a remote resource.</p>
+</blockquote>
+
+<p>Using either a tunnel through our bastion instance or kubectl exec, an
+interactive session is being started on a remote resource.</p>
+<h4 id="usage-24"><a aria-hidden="true" href="#usage-24" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki ssh [options] &lt;resource&gt;
+</code></pre>
+<h4 id="examples-24"><a aria-hidden="true" href="#examples-24" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># ssh to the bastion instance</span>
+</span></span><span style="display:flex;"><span>rekki ssh bastion
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># ssh to a hulk service pod on feat</span>
+</span></span><span style="display:flex;"><span>rekki ssh svc/hulk
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># ssh to a hulk service pod on live</span>
+</span></span><span style="display:flex;"><span>rekki ssh svc/hulk -nlive
+</span></span></code></pre><h3 id="rekki-tunnel"><a aria-hidden="true" href="#rekki-tunnel" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki tunnel</code></h3>
+
+<blockquote>
+<p>Create SSH tunnels to remote resources.</p>
+</blockquote>
+
+<p>Create a tunnel between your local machine and a remote resource. This can be
+used to access database and redis instances, but also kubernetes pods,
+services, replica sets and deployments.</p>
+
+<p>If no ports are specified, then the default protocol ports will be used:</p>
+
+<ul>
+<li>5432 for postgres</li>
+<li>6379 for redis</li>
+<li>8080 for HTTP tunnels to Kubernetes resources (as port 80 usually requires root)</li>
+</ul>
+<h4 id="usage-25"><a aria-hidden="true" href="#usage-25" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki tunnel [options] &lt;resources...&gt;
+</code></pre>
+<h4 id="examples-25"><a aria-hidden="true" href="#examples-25" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Create a tunnel to the live database</span>
+</span></span><span style="display:flex;"><span>rekki tunnel -nlive db
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Create a tunnel to the live redis instance</span>
+</span></span><span style="display:flex;"><span>rekki tunnel -nlive redis
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Create tunnels to the live database and hulk service</span>
+</span></span><span style="display:flex;"><span>rekki tunnel -nlive db svc/hulk
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Create a tunnel to the feat hulk service</span>
+</span></span><span style="display:flex;"><span>rekki tunnel svc/hulk
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Create a tunnel to the live hulk service on local port 9090</span>
+</span></span><span style="display:flex;"><span>rekki tunnel -nlive 9090:svc/hulk
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Create a tunnel to a specific database</span>
+</span></span><span style="display:flex;"><span>rekki tunnel db/feat-xxxxx
+</span></span></code></pre><h2 id="other-commands"><a aria-hidden="true" href="#other-commands" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Other Commands</h2>
+<h3 id="rekki-docs"><a aria-hidden="true" href="#rekki-docs" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki docs</code></h3>
+
+<blockquote>
+<p>Print a complete documentation for the CLI.</p>
+</blockquote>
+
+<p>Generates a complete documentation for this command-line, including
+documentation for all the commands and all the topics. Output will be printed
+on stdout and will be Markdown by default. It is possible to output HTML by
+supplying the <code>--html</code> flag. It is also possible to serve the HTML
+documentation to be consumed from your web browser with <code>--serve</code>.</p>
+<h4 id="usage-26"><a aria-hidden="true" href="#usage-26" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki docs [options]
+</code></pre>
+<h4 id="options-4"><a aria-hidden="true" href="#options-4" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Options</h4>
+
+<pre><code>    --html          produce html instead of markdown
+-p, --port uint16   port to listen on when serving doc (default 4242)
+    --serve         serve HTML documentation
+</code></pre>
+<h4 id="examples-26"><a aria-hidden="true" href="#examples-26" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Print markdown documentation on the standard output</span>
+</span></span><span style="display:flex;"><span>rekki docs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Print HTML documentation on the standard output</span>
+</span></span><span style="display:flex;"><span>rekki docs --html
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Serve HTML documentation via an http server (http://localhost:4242)</span>
+</span></span><span style="display:flex;"><span>rekki docs --serve
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Serve HTML documentation via an http server (http://localhost:9090)</span>
+</span></span><span style="display:flex;"><span>rekki docs --serve -p <span style="color:#099">9090</span>
+</span></span></code></pre><h3 id="rekki-flare"><a aria-hidden="true" href="#rekki-flare" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki flare</code></h3>
+
+<blockquote>
+<p>Send a debug trace to the #rekki-cli-flares Slack channel.</p>
+</blockquote>
+
+<p>It is being used by the Platform team to investigate a bug you might be facing.
+This is automatically done whenever an error or panic occurs.</p>
+<h4 id="usage-27"><a aria-hidden="true" href="#usage-27" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki flare [-- args...]
+</code></pre>
+<h4 id="examples-27"><a aria-hidden="true" href="#examples-27" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Send a flare</span>
+</span></span><span style="display:flex;"><span>rekki flare
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Send a flare with some additional context</span>
+</span></span><span style="display:flex;"><span>rekki flare -- I am trying to deploy my project but it fails. Can you help?
+</span></span></code></pre><h3 id="rekki-help"><a aria-hidden="true" href="#rekki-help" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki help</code></h3>
+
+<blockquote>
+<p>Help about any command or topic.</p>
+</blockquote>
+
+<p>Get more information about any command or topic in the CLI. Execute <code>rekki
+help</code> without arguments to see all the available commands and topics.</p>
+<h4 id="usage-28"><a aria-hidden="true" href="#usage-28" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki help [command|topic]
+</code></pre>
+<h4 id="examples-28"><a aria-hidden="true" href="#examples-28" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># main help page</span>
+</span></span><span style="display:flex;"><span>rekki <span style="color:#0086b3">help</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># help for the run command</span>
+</span></span><span style="display:flex;"><span>rekki <span style="color:#0086b3">help</span> run
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># help for the options topic</span>
+</span></span><span style="display:flex;"><span>rekki <span style="color:#0086b3">help</span> options
+</span></span></code></pre><h3 id="rekki-version"><a aria-hidden="true" href="#rekki-version" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><code>rekki version</code></h3>
+
+<blockquote>
+<p>Print the version.</p>
+</blockquote>
+
+<p>Print the git sha1 of the commit used to build this rekki-cli, followed by a
+newline.</p>
+<h4 id="usage-29"><a aria-hidden="true" href="#usage-29" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Usage</h4>
+
+<pre><code>rekki version
+</code></pre>
+<h4 id="examples-29"><a aria-hidden="true" href="#examples-29" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Examples</h4>
+<pre tabindex="0" style="background-color:#f6f8fa;"><code><span style="display:flex;"><span><span style="color:#998;font-style:italic"># Print the rekki-cli version</span>
+</span></span><span style="display:flex;"><span>rekki version
+</span></span></code></pre><h2 id="topics"><a aria-hidden="true" href="#topics" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Topics</h2>
+<h3 id="feedbacks-issues"><a aria-hidden="true" href="#feedbacks-issues" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Feedbacks &amp; Issues</h3>
+
+<p>You can get in touch with the Platform Team in the
+<a href="https://rekkiapp.slack.com/archives/CBJHYNGEL" target="_blank">#platform-public</a> channel for
+any feedback, issue or suggestion that you might have.</p>
+<h3 id="options-environment"><a aria-hidden="true" href="#options-environment" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Options &amp; Environment</h3>
+
+<p>The following options can be passed to any command:</p>
+
+<pre><code>-c, --cluster string         the cluster you want to interact with (default &quot;eu-west-2&quot;)
+-h, --help                   print the help
+-i, --identity-file string   an SSH private key used for public key authentication
+-n, --namespace string       the kubernetes namespace for this command (default &quot;feat&quot;)
+    --no-color               force color output to be disabled
+</code></pre>
+
+<p>Additionally, the following environment variables are supported:</p>
+
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>DEBUG</code></td>
+<td>set to <code>&quot;true&quot;</code> to enable debug information on stderr</td>
+</tr>
+
+<tr>
+<td><code>NO_COLOR</code></td>
+<td>set to any value to disable color output</td>
+</tr>
+
+<tr>
+<td><code>REKKI_CLI_NO_COLOR</code></td>
+<td>set to any value to disable color output</td>
+</tr>
+
+<tr>
+<td><code>REKKI_CLI_NO_REPORTING</code></td>
+<td>set to any value to disable slack error reporting</td>
+</tr>
+
+<tr>
+<td><code>REKKI_CLI_NO_VERSION_CHECK</code></td>
+<td>set to any value to disable the remote version check</td>
+</tr>
+
+<tr>
+<td><code>REKKI_CLI_STACKTRACE</code></td>
+<td>set to any value to enable stacktraces</td>
+</tr>
+</tbody>
+</table>
+<p>Options take precedence when they conflict with environment variables.</p>
+<h3 id="resources"><a aria-hidden="true" href="#resources" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Resources</h3>
+
+<p>A resource represents the concept of a remote resource available in the cluster
+or infrastructure. It is in various commands accross the CLI.</p>
+
+<p>The full syntax for a resource is:</p>
+
+<pre><code>[localPort:][kind/]name[@namespace][:remotePort]
+</code></pre>
+
+<p>The syntax is actually quite permissive, when the values are omitted then the
+defaults are as follow:</p>
+
+<ul>
+<li><code>localPort</code>: random for <code>rekki run</code> tunnels, deterministic for <code>rekki tunnel</code>, <code>0</code> otherwise</li>
+<li><code>kind</code>: <code>service</code> by default</li>
+<li><code>namespace</code>: the command namespace (from <code>-n</code> or <code>--namespace</code>) is used by default</li>
+<li><code>remotePort</code>: asking the Kubernetes API for <code>rekki run</code> and <code>rekki tunnel</code> tunnels, <code>0</code> otherwise</li>
+</ul>
+
+<p>The different kinds are:</p>
+
+<ul>
+<li><code>bastion</code>: for our bastion instance</li>
+<li><code>database</code>: for our AWS RDS instances (alias: <code>db</code>, <code>pg</code>, <code>postgre</code>, <code>postgres</code>, <code>postgresql</code>, <code>rds</code>)</li>
+<li><code>deployment</code>: for Kubernetes deployments (alias: <code>deploy</code>)</li>
+<li><code>job</code>: for Kubernetes jobs</li>
+<li><code>pod</code>: for Kubernetes pods</li>
+<li><code>redis</code>: for our AWS Elasticache instances</li>
+<li><code>replicaset</code>: for Kubernetes replica sets (alias: <code>rs</code>)</li>
+<li><code>service</code>: for Kubernetes services (alias: <code>svc</code>)</li>
+</ul>
+
+<p>Special case for <code>bastion</code>, <code>database</code> and <code>redis</code>: the 3 of them can be used
+as names (even though they are technically kinds). That means you can do the
+following: <code>rk tunnel db</code>. The proper name will be inferred based on the
+namespace. This is especially useful for the feat database or the redis
+instances, where the names are hard to remember or generated dynamically.</p>
+
+<p>Resources are used in different locations. Here is a non-exhaustive list of
+<strong>valid</strong> examples:</p>
+
+<ul>
+<li><code>rekki delete job/notemailer</code></li>
+<li><code>rekki env svc/hulk@live</code></li>
+<li><code>rekki history hulk</code></li>
+<li><code>rekki logs svc/hulk</code></li>
+<li><code>rekki run -t marketplace-everything@local:9090 -t blackrock-search-grpc@live</code></li>
+<li><code>rekki run -t svc/marketplace-everything@local:9090 -t svc/blackrock-search-grpc@live</code></li>
+<li><code>rekki ssh bastion</code></li>
+<li><code>rekki tunnel db/live</code></li>
+<li><code>rekki tunnel db@live</code></li>
+<li><code>rekki tunnel db</code></li>
+<li><code>rekki tunnel hulk</code></li>
+<li><code>rekki tunnel svc/hulk@live</code></li>
+<li><code>rekki tunnel svc/hulk</code></li>
+</ul>
+<h3 id="services-jobs"><a aria-hidden="true" href="#services-jobs" class="anchor"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Services &amp; Jobs</h3>
+
+<p>Services are long running processes that handle HTTP requests.</p>
+
+<p>Jobs are short running processes that perform computing tasks.</p>
+
+    </main>
+  </body>
+</html>
